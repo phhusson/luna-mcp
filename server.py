@@ -137,6 +137,22 @@ def add_poo() -> str:
     upload_logbook(events)
     return "Poo diaper added successfully"
 
+
+@app.tool()
+def add_bottle(how_many_ml: int, seconds_ago: int) -> str:
+    """Adds a bottle feeding event to the logbook"""
+    events = download_logbook()
+    new_event = {
+        "time": int(datetime.now().timestamp()) - seconds_ago,
+        "type": "BABY_BOTTLE",
+        "quantity": how_many_ml,
+        "signature": "voice"
+    }
+    events.append(new_event)
+    events.sort(key=lambda e: e.get("time", 0), reverse=True)
+    upload_logbook(events)
+    return f"Bottle ({how_many_ml}ml) added successfully"
+
 if __name__ == "__main__":
     print(last_feeding())
     print()
